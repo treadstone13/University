@@ -1,0 +1,126 @@
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@model University.Models.Enrollment
+
+@{
+    ViewBag.Title = "Home Page";
+    ViewBag.Form = "Index";    
+}
+
+<br />
+<br />
+<div class="row">
+    @using (Html.BeginForm("AddEnrollment", "Home", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @*<div class="form-group">
+                <label for="exampleInputEmail1">ID</label>
+                @Html.TextBoxFor(model => model.ID, null, new { @class = "form-control", placeholder = "Enter ID", id = "exampleInputUser1" })
+                @Html.ValidationMessageFor(model => model.ID, null, new { @class = "text-danger" })
+            </div>*@
+        <div class="form-group">
+            <label for="exampleInputEmail1">CourseID</label>
+            @Html.DropDownListFor(model => model.CourseID, ViewBag.CourseList as IEnumerable<SelectListItem>, new { @class = "btn btn-primary dropdown-toggle", id = "exampleInputUser1" })
+            @Html.ValidationMessageFor(model => model.CourseID, null, new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">StudentID</label>
+            @Html.DropDownListFor(model => model.StudentID, ViewBag.StudentList as IEnumerable<SelectListItem>, new { @class = "btn btn-primary dropdown-toggle", id = "exampleInputEmail1" })
+            @Html.ValidationMessageFor(model => model.StudentID, null, new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputPassword1">Grade</label>
+            @Html.TextBoxFor(model => model.Grade, new { @class = "form-control", id = "exampleInputEmail1" })
+            @Html.ValidationMessageFor(model => model.Grade, null, new { @class = "text-danger" })
+        </div>
+        <input class="btn btn-primary btn-block" type="submit" value="Add">
+        <br />
+        <br />
+
+        <h3>Student List</h3>
+        <div class="form-group">
+            <table class="table">
+                <tr>
+                    <td><a asp-action="Index" asp-route-sortOrder="@ViewData["IDSortParm"]">EnrollmentID</a></td>
+                    <td>CourseID</td>
+                    <td>StudentID</td>
+                    <td>Grade</td>
+                    <td></td>
+                    <td>Action</td>
+                </tr>    
+                
+                
+                @foreach (var item in ViewBag.onePageOfEnrollment)
+                {
+                <tr>
+                    <td>@item.EnrollmentID</td>
+                    <td>@item.CourseID</td>                   
+                    <td>@item.StudentID</td>                    
+                    <td>@item.Grade</td>                 
+                    <td><a class="updateE">Update</a></td>
+                    <td>@Html.ActionLink("Delete", "DeleteEnrollment", new { id = @item.EnrollmentID })</td>
+
+                </tr>
+
+
+                }
+
+
+            </table>
+            @Html.PagedListPager((IPagedList)ViewBag.onePageOfEnrollment, page => Url.Action("Index", new { page }))
+        </div>
+
+    }
+
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                @using(@Html.BeginForm("UpdateEnrollment", "Home", FormMethod.Post)){ 
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @*<div class="form-group">
+            <label for="exampleInputEmail1">ID</label>
+            @Html.TextBoxFor(model => model.ID, null, new { @class = "form-control", placeholder = "Enter ID", id = "exampleInputUser1" })
+            @Html.ValidationMessageFor(model => model.ID, null, new { @class = "text-danger" })
+        </div>*@
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">EnrollmentID</label>
+                            @Html.TextBoxFor(model => model.EnrollmentID, new { @class = "form-control", id = "EnrollmentID" })
+                            @Html.ValidationMessageFor(model => model.CourseID, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">CourseID</label>
+                            @Html.DropDownListFor(model => model.CourseID, ViewBag.CourseList as IEnumerable<SelectListItem>, new { @class = "btn btn-primary dropdown-toggle", id = "exampleInputUser1" })
+                            @Html.ValidationMessageFor(model => model.CourseID, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">StudentID</label>
+                            @Html.DropDownListFor(model => model.StudentID, ViewBag.StudentList as IEnumerable<SelectListItem>, new { @class = "btn btn-primary dropdown-toggle", id = "exampleInputEmail1" })
+                            @Html.ValidationMessageFor(model => model.StudentID, null, new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Grade</label>
+                            @Html.TextBoxFor(model => model.Grade, new { @class = "form-control", id = "exampleInputEmail1" })
+                            @Html.ValidationMessageFor(model => model.Grade, null, new { @class = "text-danger" })
+                        </div>
+                        <input class="btn btn-primary btn-block" type="submit" value="Update">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+
+
+</div>
