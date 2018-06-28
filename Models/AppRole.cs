@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace University.Models
 {
-    public class ApplicationRole : IdentityRole
+    public class AppRole : IdentityRole
     {
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }

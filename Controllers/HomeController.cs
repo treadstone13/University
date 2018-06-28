@@ -20,7 +20,7 @@ namespace University.Controllers
         private IRequestRepository _RequestRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public HomeController(IStudentRepository studentRepository, ICourseRepository courseRepository, IEnrollmentRepository enrollmentRepository, IRequestRepository requestRepository
-            ,IHttpContextAccessor httpContextAccessor)
+            , IHttpContextAccessor httpContextAccessor)
         {
             _StudentRepository = studentRepository;
             _CourseRepository = courseRepository;
@@ -35,6 +35,8 @@ namespace University.Controllers
         /// <param name="sortOrder"></param>
         /// <param name="page"></param>
         /// <returns></returns>
+        /// 
+        
         public IActionResult Index(string sortOrder, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;            

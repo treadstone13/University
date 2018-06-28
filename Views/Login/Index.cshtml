@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model University.Models.LoginUser
+@using (@Html.BeginForm("Login", "Login", FormMethod.Post))
+{
+<div class="top-buffer"></div>
+<div id="myLogin" class="panel panel-primary">
+    <div class="panel-heading panel-head">User Roles</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", id = "IdEditUserView"})
+                @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Password</label>
+                @Html.TextBoxFor(model => model.Password, new { @class = "form-control", id = "EnrollmentID" })
+                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Remember Me</label>
+                @Html.CheckBoxFor(model => model.RememberMe, new { id = "exampleInputUser1" })
+                @Html.ValidationMessageFor(model => model.RememberMe, null, new { @class = "text-danger" })
+            </div>
+            <input class="btn btn-primary btn-block" type="submit" value="Login">
+        </div>
+
+    </div>
+    </div>    
+  
+    }

@@ -36,8 +36,21 @@ namespace University
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
             services.AddTransient<IRequestRepository, RequestRepository>();
-            services.AddTransient<MiddlewareRepository>();
-            services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<UniversityContext>().AddDefaultTokenProviders();
+            services.AddTransient<MiddlewareRepository>();            
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<UniversityContext>().AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // If the LoginPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/Login.
+                options.LoginPath = "/Login";
+                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/AccessDenied.
+                options.SlidingExpiration = true;
+            });
+
             services.AddMvc();
         }
 
@@ -54,7 +67,8 @@ namespace University
                 app.UseExceptionHandler("/Home/Error");
             }
 
-
+            app.UseIdentity();
+            app.UseAuthentication();
             app.UseStaticFiles(new StaticFileOptions {
                 OnPrepareResponse = ctx => {
                     ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=600");
@@ -70,7 +84,6 @@ namespace University
             app.UseConventionalMiddleware();
             app.UseIMiddlewareMiddleware();           
             app.UseCookiePolicy();
-            app.UseIdentity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace University.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class AppUser : IdentityUser
     {
         public string Name { get; set; }
     }

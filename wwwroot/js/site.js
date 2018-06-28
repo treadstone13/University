@@ -65,3 +65,19 @@ $(document).ready(function () {
     })
 })
 
+
+$(document).ready(function () {
+    $('.EditUserModal').on('click', function () {
+        var bid = $(this).closest('td').parent();
+        //console.log(bid);
+        document.getElementById('IdEditUserView').value = bid[0].firstElementChild.innerHTML;
+        $("#myModalEditUser").modal();
+    })
+})
+
+$(document).ready(function () {
+    $('#createUserModal').on('click', function () {
+        $("#myModalAddUser").modal();
+    })
+})
+

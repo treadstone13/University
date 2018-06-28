@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace University.Models
 {
-    public class UniversityContext : DbContext
+    public class UniversityContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public UniversityContext(DbContextOptions<UniversityContext> options) : base(options)
         {
@@ -15,11 +16,7 @@ namespace University.Models
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Request> Requests { get; set; }       
-
-        public DbSet<ApplicationRole> ApplicationRoles { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
-        public DbSet<ApplicationRoleViewModels> ApplicationRoleViewModels { get; set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

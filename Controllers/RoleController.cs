@@ -12,17 +12,17 @@ namespace University.Controllers
     public class RoleController : Controller
     {
 
-        private RoleManager<ApplicationRole> _roleManager;       
-        public RoleController(RoleManager<ApplicationRole> roleManager)
+        private readonly RoleManager<AppRole> _roleManager;
+
+        public RoleController(RoleManager<AppRole> roleManager)
         {
             _roleManager = roleManager;
-           
         }
         // GET: /<controller>/
         public IActionResult Index()
         {
-            List<ApplicationRoleViewModels> model = new List<ApplicationRoleViewModels>();
-            model = _roleManager.Roles.Select(r => new ApplicationRoleViewModels
+            List<RoleListView> model = new List<RoleListView>();
+            model = _roleManager.Roles.Select(r => new RoleListView
             {
                 RoleName = r.Name,
                 Id = r.Id,
@@ -32,29 +32,34 @@ namespace University.Controllers
             ViewBag.ViewModels = model;
             return View();
         }
-
-        public async Task<IActionResult> AddEditViewModels(ApplicationRoleViewModels applicationRoleViewModels)
+        public async Task<IActionResult> AddEditViewModels(string id, RoleListView model)
         {
-            
-                bool isExist = !String.IsNullOrEmpty(applicationRoleViewModels.Id);
-                ApplicationRole applicationRole = isExist ? await _roleManager.FindByIdAsync(applicationRoleViewModels.Id) :
-               new ApplicationRole
+            if (ModelState.IsValid)
+            {
+                bool isExist = !String.IsNullOrEmpty(id);
+                AppRole applicationRole = isExist ? await _roleManager.FindByIdAsync(id) :
+               new AppRole
                {
                    CreatedDate = DateTime.Now
-               };               
-                applicationRole.Name = applicationRoleViewModels.RoleName;
-                applicationRole.Description = applicationRoleViewModels.Description;
+               };
+                applicationRole.Name = model.RoleName;
+                applicationRole.Description = model.Description;
                 applicationRole.IPAddress = Request.HttpContext.Connection.RemoteIpAddress.ToString();
                 IdentityResult roleRuslt = isExist ? await _roleManager.UpdateAsync(applicationRole)
                                                     : await _roleManager.CreateAsync(applicationRole);
-            
-            return RedirectToAction("Index", "Role");
+                if (roleRuslt.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return RedirectToAction("Index");
         }
-        public async Task<IActionResult> DeleteApplicationRole(string Id)
+
+        public async Task<IActionResult> DeleteApplicationRole(string id)
         {
-            if (!String.IsNullOrEmpty(Id))
+            if (!String.IsNullOrEmpty(id))
             {
-                ApplicationRole applicationRole = await _roleManager.FindByIdAsync(Id);
+                AppRole applicationRole = await _roleManager.FindByIdAsync(id);
                 if (applicationRole != null)
                 {
                     IdentityResult roleRuslt = _roleManager.DeleteAsync(applicationRole).Result;
@@ -64,8 +69,9 @@ namespace University.Controllers
                     }
                 }
             }
-            return View();
+            return RedirectToAction("Index");
         }
+
 
     }
 }
